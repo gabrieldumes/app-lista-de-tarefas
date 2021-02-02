@@ -38,12 +38,12 @@ public class AlterarTarefaActivity extends AppCompatActivity {
                     Toast.makeText(AlterarTarefaActivity.this, "Tarefa VAZIA!", Toast.LENGTH_SHORT).show();
                 } else {
                     bancoDeDados.setTarefa(editNovaTarefa.getText().toString(), 0);
-                    editNovaTarefa.setText("");
                     Toast.makeText(
                             AlterarTarefaActivity.this,
                             "Tarefa salva com sucesso",
                             Toast.LENGTH_SHORT
                     ).show();
+                    finish();
                 }
             }
         });
