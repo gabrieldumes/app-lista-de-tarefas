@@ -1,5 +1,6 @@
 package com.example.listadetarefas.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,11 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.listadetarefas.ArmazenamentoBancoDeDados;
 import com.example.listadetarefas.R;
+import com.example.listadetarefas.RecyclerItemClickListener;
+import com.example.listadetarefas.activity.AlterarTarefaActivity;
 import com.example.listadetarefas.adapter.Adapter;
 import com.example.listadetarefas.model.Tarefa;
 
@@ -41,6 +46,37 @@ public class TarefasAtuaisFragment extends Fragment {
         recyclerViewTarefasAtuais.setLayoutManager(layoutManager);
         recyclerViewTarefasAtuais.setHasFixedSize(true);
         recyclerViewTarefasAtuais.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
+
+        recyclerViewTarefasAtuais.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getActivity(),
+                        recyclerViewTarefasAtuais,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Tarefa tarefa = listaTarefas.get(position);
+                                Intent intent = new Intent(getActivity(), AlterarTarefaActivity.class);
+                                intent.putExtra("id_tarefa", tarefa.getId());
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                Tarefa tarefa = listaTarefas.get(position);
+                                Toast.makeText(
+                                        getActivity(),
+                                        "Clique longo / ID: " + tarefa.getId(),
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
 
         return view;
     }

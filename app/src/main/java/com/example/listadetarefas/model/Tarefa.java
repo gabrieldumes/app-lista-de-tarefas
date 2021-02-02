@@ -31,4 +31,8 @@ public class Tarefa {
     public void setStatus(int status) {
         this.status = status;
     }
+
+    public int getId() {
+        return id;
+    }
 }

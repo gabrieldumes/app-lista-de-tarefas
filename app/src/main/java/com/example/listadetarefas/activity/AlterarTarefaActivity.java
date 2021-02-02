@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.listadetarefas.ArmazenamentoBancoDeDados;
 import com.example.listadetarefas.R;
+import com.example.listadetarefas.model.Tarefa;
 
 public class AlterarTarefaActivity extends AppCompatActivity {
 
@@ -31,22 +33,51 @@ public class AlterarTarefaActivity extends AppCompatActivity {
 
         bancoDeDados = new ArmazenamentoBancoDeDados(this);
 
-        buttonSalvarTarefa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editNovaTarefa.getText().toString().equals("")) {
-                    Toast.makeText(AlterarTarefaActivity.this, "Tarefa VAZIA!", Toast.LENGTH_SHORT).show();
-                } else {
-                    bancoDeDados.setTarefa(editNovaTarefa.getText().toString(), 0);
-                    Toast.makeText(
-                            AlterarTarefaActivity.this,
-                            "Tarefa salva com sucesso",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    finish();
+        try {
+            Bundle bundle = getIntent().getExtras();
+            int idTarefa = bundle.getInt("id_tarefa");
+            Tarefa tarefa = bancoDeDados.getTarefaById(idTarefa);
+            editNovaTarefa.setText(tarefa.getTarefa());
+            buttonSalvarTarefa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (editNovaTarefa.getText().toString().equals("")) {
+                        Toast.makeText(AlterarTarefaActivity.this, "Tarefa VAZIA!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        bancoDeDados.alterarTarefa(idTarefa, editNovaTarefa.getText().toString());
+                        Toast.makeText(
+                                AlterarTarefaActivity.this,
+                                "Tarefa salva com sucesso!",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        finish();
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            buttonSalvarTarefa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (editNovaTarefa.getText().toString().equals("")) {
+                        Toast.makeText(AlterarTarefaActivity.this, "Tarefa VAZIA!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        bancoDeDados.setTarefa(editNovaTarefa.getText().toString(), 0);
+                        Toast.makeText(
+                                AlterarTarefaActivity.this,
+                                "Tarefa salva com sucesso!",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        finish();
+                    }
+                }
+            });
+            Log.i("INSETO", e.getMessage());
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
