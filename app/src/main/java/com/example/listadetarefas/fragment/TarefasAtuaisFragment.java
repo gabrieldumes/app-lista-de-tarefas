@@ -77,7 +77,6 @@ public class TarefasAtuaisFragment extends Fragment {
                                     }
                                 });
                                 dialog.setNegativeButton("Cancelar", null);
-
                                 dialog.create().show();
                             }
 
@@ -102,8 +101,8 @@ public class TarefasAtuaisFragment extends Fragment {
     }
 
     public void popularLista() {
-        for (int i = 0; i < bancoDeDados.getQtdLinhas(); i++) {
-            Tarefa tarefa = bancoDeDados.getTarefa(i);
+        for (int i = 0; i < bancoDeDados.getQtdLinhas(0); i++) {
+            Tarefa tarefa = bancoDeDados.getTarefa(i, 0);
             this.listaTarefas.add(tarefa);
         }
     }

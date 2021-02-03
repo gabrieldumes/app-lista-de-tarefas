@@ -19,7 +19,7 @@ import com.example.listadetarefas.model.Tarefa;
 public class AlterarTarefaActivity extends AppCompatActivity {
 
     private EditText editNovaTarefa;
-    private Button buttonSalvarTarefa;
+    private Button buttonSalvarTarefa, buttonConcluido;
 
     private ArmazenamentoBancoDeDados bancoDeDados;
 
@@ -30,6 +30,9 @@ public class AlterarTarefaActivity extends AppCompatActivity {
 
         editNovaTarefa = findViewById(R.id.editNovaTarefa);
         buttonSalvarTarefa = findViewById(R.id.buttonSalvarTarefa);
+        buttonConcluido = findViewById(R.id.buttonConcluido);
+
+        buttonConcluido.setVisibility(View.GONE);
 
         bancoDeDados = new ArmazenamentoBancoDeDados(this);
 
@@ -37,6 +40,12 @@ public class AlterarTarefaActivity extends AppCompatActivity {
             Bundle bundle = getIntent().getExtras();
             int idTarefa = bundle.getInt("id_tarefa");
             Tarefa tarefa = bancoDeDados.getTarefaById(idTarefa);
+            buttonConcluido.setVisibility(View.VISIBLE);
+            if (tarefa.getStatus() == 0) {
+                buttonConcluido.setText("Marcar tarefa como concluída");
+            } else {
+                buttonConcluido.setText("Tarefa concluída");
+            }
             editNovaTarefa.setText(tarefa.getTarefa());
             buttonSalvarTarefa.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -54,6 +63,18 @@ public class AlterarTarefaActivity extends AppCompatActivity {
                     }
                 }
             });
+            buttonConcluido.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (bancoDeDados.getTarefaById(idTarefa).getStatus() == 0) {
+                        if (bancoDeDados.marcarTarefaConcluido(idTarefa)) {
+                            buttonConcluido.setText("Tarefa concluída");
+                        }
+                    } else {
+                        Toast.makeText(AlterarTarefaActivity.this, "Esta tarefa já está concluída!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         } catch (Exception e) {
             buttonSalvarTarefa.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -61,7 +82,7 @@ public class AlterarTarefaActivity extends AppCompatActivity {
                     if (editNovaTarefa.getText().toString().equals("")) {
                         Toast.makeText(AlterarTarefaActivity.this, "Tarefa VAZIA!", Toast.LENGTH_SHORT).show();
                     } else {
-                        bancoDeDados.setTarefa(editNovaTarefa.getText().toString(), 0);
+                        bancoDeDados.addTarefa(editNovaTarefa.getText().toString(), 0);
                         Toast.makeText(
                                 AlterarTarefaActivity.this,
                                 "Tarefa salva com sucesso!",

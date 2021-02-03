@@ -23,7 +23,7 @@ public class ArmazenamentoBancoDeDados {
         }
     }
 
-    public void setTarefa(String tarefa, int status) {
+    public void addTarefa(String tarefa, int status) {
         try {
             database.execSQL("INSERT INTO tarefas(tarefa, status) VALUES ('" + tarefa + "', "+ status +")");
         } catch (Exception e) {
@@ -31,9 +31,9 @@ public class ArmazenamentoBancoDeDados {
         }
     }
 
-    public Tarefa getTarefa(int position) {
+    public Tarefa getTarefa(int position, int status) {
         try {
-            Cursor cursor = database.rawQuery("SELECT id, tarefa, status FROM tarefas", null);
+            Cursor cursor = database.rawQuery("SELECT id, tarefa, status FROM tarefas WHERE status = " + status, null);
             int indiceColunaId = cursor.getColumnIndex("id");
             int indiceColunaTarefa = cursor.getColumnIndex("tarefa");
             int indiceColunaStatus = cursor.getColumnIndex("status");
@@ -84,9 +84,19 @@ public class ArmazenamentoBancoDeDados {
         }
     }
 
-    public int getQtdLinhas() {
+    public boolean marcarTarefaConcluido(int id) {
         try {
-            Cursor cursor = database.rawQuery("SELECT id, tarefa, status FROM tarefas", null);
+            database.execSQL("UPDATE tarefas SET status = 1 WHERE id = " + id);
+            return true;
+        } catch (Exception e) {
+            Log.i("INSETO ", e.getMessage());
+            return false;
+        }
+    }
+
+    public int getQtdLinhas(int status) {
+        try {
+            Cursor cursor = database.rawQuery("SELECT id, tarefa, status FROM tarefas WHERE status = " + status, null);
             return cursor.getCount();
         } catch (Exception e) {
             Log.i("INSETO ", e.getMessage());
