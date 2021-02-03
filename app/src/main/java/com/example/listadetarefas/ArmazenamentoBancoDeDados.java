@@ -29,12 +29,6 @@ public class ArmazenamentoBancoDeDados {
         } catch (Exception e) {
             Log.i("INSETO ", e.getMessage());
         }
-
-        /*try {
-
-        } catch (Exception e) {
-            Log.i("INSETO ", e.getMessage());
-        }*/
     }
 
     public Tarefa getTarefa(int position) {
@@ -77,6 +71,14 @@ public class ArmazenamentoBancoDeDados {
     public void alterarTarefa(int id, String tarefa) {
         try {
             database.execSQL("UPDATE tarefas SET tarefa = '"+ tarefa + "' WHERE id = " + id);
+        } catch (Exception e) {
+            Log.i("INSETO ", e.getMessage());
+        }
+    }
+
+    public void removerTarefa(int id) {
+        try {
+            database.execSQL("DELETE FROM tarefas WHERE id = " + id);
         } catch (Exception e) {
             Log.i("INSETO ", e.getMessage());
         }

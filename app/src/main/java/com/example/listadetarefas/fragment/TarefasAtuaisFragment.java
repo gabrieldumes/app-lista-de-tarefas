@@ -1,5 +1,7 @@
 package com.example.listadetarefas.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -63,11 +65,20 @@ public class TarefasAtuaisFragment extends Fragment {
                             @Override
                             public void onLongItemClick(View view, int position) {
                                 Tarefa tarefa = listaTarefas.get(position);
-                                Toast.makeText(
-                                        getActivity(),
-                                        "Clique longo / ID: " + tarefa.getId(),
-                                        Toast.LENGTH_SHORT
-                                ).show();
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                                dialog.setTitle("Deseja excluir a tarefa?");
+                                dialog.setMessage("Esta operação não pode ser desfeita");
+                                dialog.setCancelable(false);
+                                dialog.setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        bancoDeDados.removerTarefa(tarefa.getId());
+                                        onStart();
+                                    }
+                                });
+                                dialog.setNegativeButton("Cancelar", null);
+
+                                dialog.create().show();
                             }
 
                             @Override
