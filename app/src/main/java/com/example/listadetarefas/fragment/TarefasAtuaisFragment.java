@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.listadetarefas.ArmazenamentoBancoDeDados;
 import com.example.listadetarefas.R;
@@ -40,7 +38,7 @@ public class TarefasAtuaisFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tarefas_atuais, container, false);
 
-        recyclerViewTarefasAtuais = view.findViewById(R.id.recyclerViewTarefasAtuais);
+        recyclerViewTarefasAtuais = view.findViewById(R.id.recyclerTarefasAtuais);
 
         bancoDeDados = new ArmazenamentoBancoDeDados(getActivity());
 
